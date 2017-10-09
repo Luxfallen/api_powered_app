@@ -1,7 +1,7 @@
 {
   "name": "simple_http",
   "version": "0.0.0",
-  "description": "A simple HTTP example using status codes.",
+  "description": "A simple application for D&D 5E characters.",
   "main": "./src/server.js",
   "scripts": {
     "start": "node ./src/server.js",
