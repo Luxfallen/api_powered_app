@@ -5,9 +5,19 @@ const crypto = require('crypto');
     - Name
     - Race
     - Subrace
+    - Alignment
+    - Size
+    - Speed
+    - HP
     - Class (array)
+      - Subclass
     - Level (array)
     - Background
+    - Languages
+    - Proficiencies
+    - Scores
+    - Feats
+    - Age
 */
 
 // Until database is implemented...
@@ -88,6 +98,7 @@ const characterGET = (request, response, params) => {
 
 // POST Character
 const characterPOST = (request, response) =>
+  // PRIORITY
   respondJSON(request, response, 201, {
     id: 'postSuccess',
     message: 'Character added to library',
