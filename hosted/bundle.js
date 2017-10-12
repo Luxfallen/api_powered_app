@@ -1,29 +1,31 @@
 'use strict';
 
+/* eslint-disable no-undef */
+
 var sortCharResponse = function sortCharResponse(chars) {
   var res = document.querySelector('#results');
   for (var i = 0; i < chars.length; i++) {
+    console.log('Prep append.');
     var opt = document.createElement('option');
     opt.value = i;
     opt.innerHTML = chars[i].name;
     res.appendChild(opt);
   }
   res.onchange = function (e) {
-    document.querySelector('#content').innerHTML += JSON.stringify([e.target.value]);
+    document.querySelector('#content').innerHTML += JSON.stringify(chars[e.target.value]);
   };
 };
 
-var handleResponse = function handleResponse(xhr, parseResponse) {
-  var content = document.querySelector("#content");
-  if (parseResponse) {
-    var obj = JSON.parse(xhr.response);
-    if (obj.message) {
-      console.dir(obj);
-    } else if (obj.chars) {
-      sortCharResponse(obj.chars);
-    } else {
-      content.innerHTML += xhr.response;
-    }
+var handleResponse = function handleResponse(xhr) {
+  var content = document.querySelector('#content');
+  var obj = JSON.parse(xhr.response);
+  console.log(obj);
+  if (obj.message) {
+    console.dir(obj);
+  } else if (obj.chars) {
+    sortCharResponse(obj.chars);
+  } else {
+    content.innerHTML += xhr.response;
   }
 };
 
@@ -46,7 +48,7 @@ var makeCharRequest = function makeCharRequest(e, form) {
   var url = '/getChar?' + type + '=' + input;
   xhr.open('GET', url);
   xhr.onload = function () {
-    return handleResponse(xhr, true);
+    return handleResponse(xhr);
   };
   xhr.send();
   e.preventDefault();

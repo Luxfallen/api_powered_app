@@ -1,5 +1,6 @@
 const crypto = require('crypto');
-const fs = require('fs');
+const charArr = require('../hosted/chars.json');
+
 /*
   Characters consist of:
     - Name
@@ -33,29 +34,8 @@ const sleep = (ms) => {
 };
 */
 
-// Until database is implemented...
-let etag = {};
-let digest = {};
-
-const charArr = fs.readFile(`${__dirname}/../hosted/chars.json`, (err, data) => {
-  if (err) {
-    console.dir(err);
-  }
-  return data;
-});
-
-// I need to figure out a better way to handle retrieving the data!
-if (!charArr) {
-  setTimeout(() => {
-    etag = crypto.createHash('sha1').update(JSON.stringify(charArr));
-    digest = etag.digest('hex');
-    console.dir(charArr);
-  });
-}
-
-console.dir(charArr);
-etag = crypto.createHash('sha1').update(charArr);
-digest = etag.digest('hex');
+const etag = crypto.createHash('sha1').update(JSON.stringify(charArr));
+const digest = etag.digest('hex');
 
 // region **** Local Use ****
 // Format response containing status & object for client
@@ -95,7 +75,9 @@ const searchChars = (params) => {
     }
     i++;
   } while (!match || i < charArr.chars.length);
-  return results;
+  return {
+    chars: results,
+  };
 };
 // endregion
 

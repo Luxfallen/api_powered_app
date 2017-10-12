@@ -1,27 +1,29 @@
+/* eslint-disable no-undef */
+
 const sortCharResponse = (chars) => {
   const res = document.querySelector('#results');
   for (let i = 0; i < chars.length; i++) {
+    console.log('Prep append.');
     const opt = document.createElement('option');
     opt.value = i;
     opt.innerHTML = chars[i].name;
     res.appendChild(opt);
   }
   res.onchange = (e) => {
-    document.querySelector('#content').innerHTML += JSON.stringify([e.target.value]);
-  }
-}
+    document.querySelector('#content').innerHTML += JSON.stringify(chars[e.target.value]);
+  };
+};
 
-const handleResponse = (xhr, parseResponse) => {
-  const content = document.querySelector("#content");
-  if (parseResponse) {
-    const obj = JSON.parse(xhr.response);
-    if (obj.message) {
-      console.dir(obj);
-    } else if (obj.chars) {
-      sortCharResponse(obj.chars);
-    } else {
-      content.innerHTML += xhr.response;
-    }
+const handleResponse = (xhr) => {
+  const content = document.querySelector('#content');
+  const obj = JSON.parse(xhr.response);
+  console.log(obj);
+  if (obj.message) {
+    console.dir(obj);
+  } else if (obj.chars) {
+    sortCharResponse(obj.chars);
+  } else {
+    content.innerHTML += xhr.response;
   }
 };
 
@@ -33,7 +35,7 @@ const makePost = (e, form) => {
   xhr.send(data);
   e.preventDefault();
   return false;
-}
+};
 
 const makeCharRequest = (e, form) => {
   const xhr = new XMLHttpRequest();
@@ -41,7 +43,7 @@ const makeCharRequest = (e, form) => {
   const input = form.querySelector('#query').value.toLowerCase();
   const url = `/getChar?${type}=${input}`;
   xhr.open('GET', url);
-  xhr.onload = () => handleResponse(xhr, true);
+  xhr.onload = () => handleResponse(xhr);
   xhr.send();
   e.preventDefault();
   return false;
@@ -57,7 +59,7 @@ const makeDataRequest = (e, form) => {
 
 const init = () => {
   const queryForm = document.querySelector('#queryForm');
-  const getChar = (e) => makeCharRequest(e, queryForm);
+  const getChar = e => makeCharRequest(e, queryForm);
   queryForm.addEventListener('submit', getChar);
 };
 
