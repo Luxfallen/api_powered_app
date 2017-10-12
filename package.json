@@ -1,6 +1,10 @@
 {
   "name": "simple_http",
   "version": "0.0.0",
+  "engines": {
+    "node": "8.4.0",
+    "npm": "5.3.0"
+  },
   "description": "A simple application for D&D 5E characters.",
   "main": "./src/server.js",
   "scripts": {
@@ -11,7 +15,7 @@
     "build": "babel ./client --out-file ./hosted/bundle.js",
     "watch": "babel --watch ./client --out-file ./hosted/bundle.js"
   },
-  "author": "Cody Van De Mark",
+  "author": "Hawkon Gustavsson",
   "license": "ISC",
   "devDependencies": {
     "babel-cli": "^6.26.0",
