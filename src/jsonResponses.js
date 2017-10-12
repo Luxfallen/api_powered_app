@@ -1,5 +1,5 @@
 const crypto = require('crypto');
-
+const fs = require('fs');
 /*
   Characters consist of:
     - Name
@@ -20,11 +20,42 @@ const crypto = require('crypto');
     - Age
 */
 
-// Until database is implemented...
-const chars = [];
+// Causes server to wait x ms
+// WARNING: UNPROFESSIONAL AF
+/*
+const sleep = (ms) => {
+  const start = new Date().getTime();
+  for (let i = 0; i < 1e7; i++) {
+    if ((new Date().getTime() - start) > ms) {
+      break;
+    }
+  }
+};
+*/
 
-const etag = crypto.createHash('sha1').update(JSON.stringify(chars));
-const digest = etag.digest('hex');
+// Until database is implemented...
+let etag = {};
+let digest = {};
+
+const charArr = fs.readFile(`${__dirname}/../hosted/chars.json`, (err, data) => {
+  if (err) {
+    console.dir(err);
+  }
+  return data;
+});
+
+// I need to figure out a better way to handle retrieving the data!
+if (!charArr) {
+  setTimeout(() => {
+    etag = crypto.createHash('sha1').update(JSON.stringify(charArr));
+    digest = etag.digest('hex');
+    console.dir(charArr);
+  });
+}
+
+console.dir(charArr);
+etag = crypto.createHash('sha1').update(charArr);
+digest = etag.digest('hex');
 
 // region **** Local Use ****
 // Format response containing status & object for client
@@ -54,16 +85,16 @@ const searchChars = (params) => {
   const results = [];
   let i = 0;
   do {
-    if (params.name && chars[i].char.name === params.name) {
+    if (params.name && charArr.chars[i].name.toLowerCase() === params.name) {
       match = true;
-      results.push(chars[i]);
-    } else if (params.race && chars[i].char.race === params.race) {
-      results.push(chars[i]);
-    } else if (params.class && chars[i].char.class === params.class) {
-      results.push(chars[i]);
+      results.push(charArr.chars[i]);
+    } else if (params.race && charArr.chars[i].race.toLowerCase() === params.race) {
+      results.push(charArr.chars[i]);
+    } else if (params.class && charArr.chars[i].class.toLowerCase() === params.class) {
+      results.push(charArr.chars[i]);
     }
     i++;
-  } while (!match || i < chars.length);
+  } while (!match || i < charArr.chars.length);
   return results;
 };
 // endregion
@@ -103,6 +134,7 @@ const characterPOST = (request, response) =>
     id: 'postSuccess',
     message: 'Character added to library',
   });
+
 // PageNotFound
 const notFound = (request, response) => {
   if (request.method === 'HEAD') {

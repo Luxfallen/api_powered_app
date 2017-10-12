@@ -8,6 +8,7 @@ const port = process.env.PORT || process.env.NODE_PORT || 3000;
 
 const onRequest = (request, response) => {
   const parsedURL = url.parse(request.url);
+  const params = query.parse(parsedURL.query);
   if (request.method === 'GET' || request.method === 'HEAD') {
     switch (parsedURL.pathname) {
       case '/':
@@ -20,11 +21,13 @@ const onRequest = (request, response) => {
       case '/bundle.js':
         htmlHandler.getBundle(request, response);
         break;
+      case '/getChar':
+        jsonHandler.characterGET(request, response, params);
+        break;
       default:
         jsonHandler.notFound(request, response);
         break;
     }
-    jsonHandler.characterGET(request, response, query.parse(parsedURL));
   } else if (request.method === 'POST') {
     // Temporary until POST Character is finished
     jsonHandler.notFound(request, response);

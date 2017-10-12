@@ -23,7 +23,7 @@ const getBundle = (request, response) => {
 };
 
 const getStyle = (request, response) => {
-  fs.readFile(`${__dirname}/../hosted/bundle.js`, (err, data) => {
+  fs.readFile(`${__dirname}/../hosted/style.css`, (err, data) => {
     response.writeHead(200, {
       'Content-Type': 'text/css',
     });
