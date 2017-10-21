@@ -3,18 +3,15 @@ const charArr = {
     name: 'Eirikr Fyreborne',
     race: 'Human',
     subrace: 'Illuskan',
-    alignment: ['Neutral Good', 'NG'],
+    alignment: 'Neutral Good',
     size: 'Medium',
     speed: 30,
     hp_max: 144,
-    class: [{
-      main: 'paladin',
-      subclass: 'oath of devotion',
-    }, {
-      main: 'sorcerer',
-      subclass: 'draconic bloodline',
-    }],
-    level: [8, 6],
+    class: {
+      main: 'Paladin',
+      subclass: 'Oath of Devotion',
+    },
+    level: 8,
     background: {
       soldier: {
         traits: ['I can stare down a hell hound without flinching.',
