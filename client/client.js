@@ -95,6 +95,7 @@ const handleResponse = (xhr) => {
   }
 };
 
+// !!! High Priority
 const makePost = (e, form) => {
   const xhr = new XMLHttpRequest();
   xhr.open(method, action);
@@ -117,6 +118,7 @@ const makeCharRequest = (e, form) => {
   return false;
 };
 
+/*
 const makeDataRequest = (e, form) => {
   const xhr = new XMLHttpRequest();
   xhr.open('GET', url);
@@ -124,9 +126,10 @@ const makeDataRequest = (e, form) => {
   e.preventDefault();
   return false;
 };
+*/
 
 const prepFields = (select) => {
-  switch (select.id || select.class) {
+  switch (select.id) {
     case 'race':
       choices.races.forEach((element) => {
         const opt = document.createElement('option');
@@ -193,7 +196,12 @@ const prepFields = (select) => {
 };
 
 const init = () => {
+  prepFields(document.querySelector('#background'));
+  prepFields(document.querySelector('#feat'));
   prepFields(document.querySelector('#race'));
+  prepFields(document.querySelector('#class'));
+  document.querySelector('#subrace').onchange = prepFields(e);
+  document.querySelector('#subclass').onchange = prepFields(e);
 
   const queryForm = document.querySelector('#queryForm');
   const getChar = e => makeCharRequest(e, queryForm);
