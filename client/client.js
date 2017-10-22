@@ -87,11 +87,11 @@ const handleResponse = (xhr) => {
   const obj = JSON.parse(xhr.response);
   // console.log(obj);
   if (obj.message) {
-    // console.dir(obj);
+    content.innerHTML += xhr.response;
   } else if (obj.chars) {
     sortCharResponse(obj.chars);
   } else {
-    content.innerHTML += xhr.response;
+    // content.innerHTML += xhr.response;
   }
 };
 
