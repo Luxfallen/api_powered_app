@@ -30,6 +30,27 @@ const onRequest = (request, response) => {
     }
   } else if (request.method === 'POST') {
     // Temporary until POST Character is finished
+    if (parsedURL.pathname === '/addChar') {
+      const res = response;
+      const body = [];
+      // If there's an error, immediately end and send
+      request.on('error', (err) => {
+        console.dir(err);
+        res.statusCode = 400;
+        res.end();
+      });
+      // Comes in a stream, so add it chunk by chunk
+      request.on('data', (chunk) => {
+        body.push(chunk);
+      });
+      // When that's all done...
+      request.on('end', () => {
+        const bodyString = Buffer.concat(body).toString();
+        const bodyParams = query.parse(bodyString);
+        jsonHandler.addUser(request, response, bodyParams);
+      });
+    }
+  } else {
     jsonHandler.notFound(request, response);
   }
 };

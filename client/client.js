@@ -71,7 +71,7 @@ const choices = {
 const sortCharResponse = (chars) => {
   const res = document.querySelector('#results');
   for (let i = 0; i < chars.length; i++) {
-    console.log('Prep append.');
+    // console.log('Prep append.');
     const opt = document.createElement('option');
     opt.value = i;
     opt.innerHTML = chars[i].name;
@@ -85,9 +85,9 @@ const sortCharResponse = (chars) => {
 const handleResponse = (xhr) => {
   const content = document.querySelector('#content');
   const obj = JSON.parse(xhr.response);
-  console.log(obj);
+  // console.log(obj);
   if (obj.message) {
-    console.dir(obj);
+    // console.dir(obj);
   } else if (obj.chars) {
     sortCharResponse(obj.chars);
   } else {
@@ -97,10 +97,44 @@ const handleResponse = (xhr) => {
 
 // !!! High Priority
 const makePost = (e, form) => {
+  const name = form.querySelector('#charName').value;
+  const race = form.querySelector('#race').value;
+  const subrace = form.querySelector('#subrace').value;
+  const charClass = form.querySelector('#class').value;
+  const subclass = form.querySelector('#subclass').value;
+  const level = form.querySelector('#level').value;
+  const background = form.querySelector('#background').value;
+  const trait1 = form.querySelector('#trait1').value;
+  const trait2 = form.querySelector('#trait2').value;
+  const ideal = form.querySelector('#idea').value;
+  const bond = form.querySelector('#bond').value;
+  const flaw = form.querySelector('#flaw').value;
+  const feat = form.querySelector('#feat').value;
+  // These two are going to be tricky...
+  const langs = form.querySelectorAll("[name='languages']");
+  const languages = [];
+  langs.forEach((element) => {
+    if (element.value) {
+      languages.push(element.id);
+    }
+  }, this);
+  const sts = form.querySelectorAll("[name='stat']");
+  const stats = [];
+  sts.forEach((element) => {
+    stats.push(element.value);
+  }, this);
+
+
   const xhr = new XMLHttpRequest();
   xhr.open(method, action);
   xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-  xhr.onload = () => handleResponse(xhr, true);
+
+  xhr.onload = () => handleResponse(xhr);
+
+  const data = `name=${name}&race=${race}&subrace=${subrace}&class=${charClass}&
+    subclass=${subclass}&level=${level}&background=${background}&alignment=${alignment}&
+    traits=${[trait1, trait2]}&ideal=${ideal}&bond=${bond}&flaw=${flaw}&
+    feat=${feat}&languages=${languages}&stats=${stats}`;
   xhr.send(data);
   e.preventDefault();
   return false;
@@ -118,17 +152,8 @@ const makeCharRequest = (e, form) => {
   return false;
 };
 
-/*
-const makeDataRequest = (e, form) => {
-  const xhr = new XMLHttpRequest();
-  xhr.open('GET', url);
-  xhr.send();
-  e.preventDefault();
-  return false;
-};
-*/
-
 const prepFields = (select) => {
+  // This is too messy! Figure out away to clean it up!
   switch (select.id) {
     case 'race':
       choices.races.forEach((element) => {
@@ -206,6 +231,10 @@ const init = () => {
   const queryForm = document.querySelector('#queryForm');
   const getChar = e => makeCharRequest(e, queryForm);
   queryForm.addEventListener('submit', getChar);
+
+  const charForm = document.querySelector('#charForm');
+  const post = e => makePost(e, charForm);
+  charForm.addEventListener('submit', post);
 };
 
 window.onload = init;

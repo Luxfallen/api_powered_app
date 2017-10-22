@@ -1,41 +1,30 @@
 const crypto = require('crypto');
-const charArr = require('../hosted/chars.json');
+const deepArr = require('../hosted/chars.json');
 
 /*
+  !! Change of plans! Character builds, not characters! !!
   Characters consist of:
     - Name
     - Race
-    - Subrace
+      - Subrace
     - Alignment
-    - Size
-    - Speed
-    - HP
+    - Size  // N/a - determined by race
+    - Speed // N/a - determined by race / feat
+    - HP  // N/a - based off of class
     - Class (array)
       - Subclass
     - Level (array)
     - Background
-    - Languages
-    - Proficiencies
+    - Languages // MIGHT remove... - race/background
+    - Proficiencies // N/a - class/race/background
     - Scores
     - Feats
-    - Age
+    - Age // N/a
 */
 
-// Causes server to wait x ms
-// WARNING: UNPROFESSIONAL AF
-/*
-const sleep = (ms) => {
-  const start = new Date().getTime();
-  for (let i = 0; i < 1e7; i++) {
-    if ((new Date().getTime() - start) > ms) {
-      break;
-    }
-  }
-};
-*/
-
-const etag = crypto.createHash('sha1').update(JSON.stringify(charArr));
-const digest = etag.digest('hex');
+const charArr = deepArr.chars;
+let etag = crypto.createHash('sha1').update(JSON.stringify(charArr));
+let digest = etag.digest('hex');
 
 // region **** Local Use ****
 // Format response containing status & object for client
@@ -65,16 +54,16 @@ const searchChars = (params) => {
   const results = [];
   let i = 0;
   do {
-    if (params.name && charArr.chars[i].name.toLowerCase() === params.name) {
+    if (params.name && charArr[i].name.toLowerCase() === params.name) {
       match = true;
-      results.push(charArr.chars[i]);
-    } else if (params.race && charArr.chars[i].race.toLowerCase() === params.race) {
-      results.push(charArr.chars[i]);
-    } else if (params.class && charArr.chars[i].class.toLowerCase() === params.class) {
-      results.push(charArr.chars[i]);
+      results.push(charArr[i]);
+    } else if (params.race && charArr[i].race.toLowerCase() === params.race) {
+      results.push(charArr[i]);
+    } else if (params.class && charArr[i].class.toLowerCase() === params.class) {
+      results.push(charArr[i]);
     }
     i++;
-  } while (!match || i < charArr.chars.length);
+  } while (!match || i < charArr.length);
   return {
     chars: results,
   };
@@ -110,12 +99,52 @@ const characterGET = (request, response, params) => {
 };
 
 // POST Character
-const characterPOST = (request, response) =>
-  // PRIORITY
-  respondJSON(request, response, 201, {
-    id: 'postSuccess',
-    message: 'Character added to library',
+const characterPOST = (request, response, params) => {
+  let code = 400;
+  if (!params.name) {
+    respondJSON(request, response, code, {
+      id: 'missingParameter',
+      message: 'Name is a necessary parameter.',
+    });
+  }
+  let c;
+  for (let i = 0; i < charArr.length; i++) {
+    if (charArr[i].name === params.name) {
+      c = charArr[i];
+      code = 204;
+    }
+  } if (!c) {
+    code = 201;
+    c = {};
+    c.name = params.name;
+  }
+  c.race = params.race;
+  c.subrace = params.subrace;
+  c.alignment = params.alignment;
+  c.class.main = params.class;
+  c.class.subclass = params.subclass;
+  c.level = params.level;
+  c.background = params.background;
+  c.traits = params.traits;
+  c.ideal = params.ideal;
+  c.bond = params.bond;
+  c.flaw = params.flaw;
+  c.languages = params.languages;
+  c.scores = params.scores;
+  c.feat = params.feat;
+  if (code === 201) {
+    charArr.push(c);
+  }
+  etag = crypto.createHash('sha1').update(JSON.stringify(charArr));
+  digest = etag.digest('hex');
+  if (code === 204) {
+    return respondMeta(request, response, code);
+  }
+  return respondJSON(request, response, code, {
+    id: 'addSuccess',
+    message: 'Character added successfully',
   });
+};
 
 // PageNotFound
 const notFound = (request, response) => {
