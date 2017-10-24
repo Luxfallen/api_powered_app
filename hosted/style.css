@@ -5,6 +5,7 @@ body {
   margin: 0;
   padding-top: 1vh;
   background-color: #68411c;
+  font-family: serif;
 }
 
 input,
@@ -16,6 +17,7 @@ select {
 
 h1 {
   margin: 0;
+  font-family: sans-serif;
 }
 
 .right {
