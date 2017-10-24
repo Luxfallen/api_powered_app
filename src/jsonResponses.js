@@ -1,5 +1,5 @@
 const crypto = require('crypto');
-const deepArr = require('../hosted/chars.json');
+const deepArr = require('../hosted/chars.js');
 
 /*
   !! Change of plans! Character builds, not characters! !!
@@ -22,7 +22,7 @@ const deepArr = require('../hosted/chars.json');
     - Age // N/a
 */
 
-const charArr = deepArr.chars;
+const charArr = deepArr.charArr.chars;
 let etag = crypto.createHash('sha1').update(JSON.stringify(charArr));
 let digest = etag.digest('hex');
 
@@ -50,23 +50,36 @@ const respondMeta = (request, response, status) => {
 
 // Check array for matches to query
 const searchChars = (params) => {
-  let match = false;
   const results = [];
-  let i = 0;
-  do {
+  for (let i = 0; i < charArr.length; i++) {
     if (params.name && charArr[i].name.toLowerCase() === params.name) {
-      match = true;
       results.push(charArr[i]);
     } else if (params.race && charArr[i].race.toLowerCase() === params.race) {
       results.push(charArr[i]);
-    } else if (params.class && charArr[i].class.toLowerCase() === params.class) {
+    } else if (params.class && charArr[i].class.main.toLowerCase() === params.class) {
       results.push(charArr[i]);
     }
-    i++;
-  } while (!match || i < charArr.length);
+  }
   return {
     chars: results,
   };
+};
+
+const customParse = (arr) => {
+  const newArr = [];
+  let j = 0;
+  for (let i = 0; i < arr.length; i++) {
+    if (arr[i] === ',') {
+      j++;
+    } else if (arr[i] !== '') {
+      if (!newArr[j]) {
+        newArr[j] = arr[i];
+      } else {
+        newArr[j] += arr[i];
+      }
+    }
+  }
+  return newArr;
 };
 // endregion
 
@@ -101,7 +114,7 @@ const characterGET = (request, response, params) => {
 // POST Character
 const characterPOST = (request, response, params) => {
   let code = 400;
-  if (!params.name) {
+  if (!params.name || params.name === '') {
     respondJSON(request, response, code, {
       id: 'missingParameter',
       message: 'Name is a necessary parameter.',
@@ -121,22 +134,31 @@ const characterPOST = (request, response, params) => {
   c.race = params.race;
   c.subrace = params.subrace;
   c.alignment = params.alignment;
-  c.class.main = params.class;
-  c.class.subclass = params.subclass;
+  c.class = params.class;
+  c.subclass = params.subclass;
   c.level = params.level;
   c.background = params.background;
-  c.traits = params.traits;
+  c.traits = customParse(params.traits);
   c.ideal = params.ideal;
   c.bond = params.bond;
   c.flaw = params.flaw;
-  c.languages = params.languages;
-  c.scores = params.scores;
+  c.languages = [];
+  const tempLang = customParse(params.languages);
+  for (let i = 0; i < tempLang.length; i++) {
+    c.languages.push(tempLang[i]);
+  }
+  c.scores = [];
+  const tempScore = customParse(params.stats);
+  for (let i = 0; i < tempScore.length; i++) {
+    c.scores.push(tempScore[i]);
+  }
   c.feat = params.feat;
   if (code === 201) {
     charArr.push(c);
   }
   etag = crypto.createHash('sha1').update(JSON.stringify(charArr));
   digest = etag.digest('hex');
+  console.dir(charArr);
   if (code === 204) {
     return respondMeta(request, response, code);
   }

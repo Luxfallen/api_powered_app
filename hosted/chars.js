@@ -7,10 +7,8 @@ const charArr = {
     // size: 'Medium',
     // speed: 30,
     // hp_max: 144,
-    class: {
-      main: 'Paladin',
-      subclass: 'Oath of Devotion',
-    },
+    class: 'Paladin',
+    subclass: 'Oath of Devotion',
     level: 8,
     background: 'Soldier',
     traits: ['I can stare down a hell hound without flinching.',

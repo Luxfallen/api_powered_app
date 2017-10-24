@@ -8,172 +8,194 @@
 </head>
 
 <body>
-  <section>
-    <form id="queryForm" action="/getChar">
-      <label for="query">Search:</label>
-      <br>
-      <input id="query" type="text">
-      <br>
-      <label for="queryType">Seach by </label>
-      <select id="queryType">
-        <option value='name'>Name</option>
-        <option value='class'>Class</option>
-        <option value='race'>Race</option>
+  <div id="main">
+    <h1>WebSheets</h1>
+    <section>
+      <form id="queryForm" action="/getChar">
+        <label for="query">Search:</label>
+        <br>
+        <input id="query" type="text">
+        <br>
+        <label for="queryType">Seach by </label>
+        <select id="queryType">
+          <option value='name'>Name</option>
+          <option value='class'>Class</option>
+          <option value='race'>Race</option>
+        </select>
+        <input type="submit" value="Search">
+      </form>
+    </section>
+
+    <section id="content">
+      <p id="feedback"></p>
+      <label for="results">Results: </label>
+      <select id="results">
+        <option value='null'>---</option>
       </select>
-      <input type="submit" value="Search">
+      <br>
+    </section>
+
+    <form id="charForm">
+      <fieldset id="stats" form="charForm" class="left">
+        <legend>Stats</legend>
+        <div class="stat_block">
+          <input type="number" name='stat' id="str" min="4" max="30">
+          <br>
+          <label for="str">STR</label>
+        </div>
+        <div class="stat_block">
+          <input type="number" name='stat' id="dex" min="4" max="30">
+          <br>
+          <label for="dex">DEX</label>
+        </div>
+        <div class="stat_block">
+          <input type="number" name='stat' id="con" min="4" max="30">
+          <br>
+          <label for="con">CON</label>
+        </div>
+        <div class="stat_block">
+          <input type="number" name='stat' id="int" min="4" max="30">
+          <br>
+          <label for="int">INT</label>
+        </div>
+        <div class="stat_block">
+          <input type="number" name='stat' id="wis" min="4" max="30">
+          <br>
+          <label for="wis">WIS</label>
+        </div>
+        <div class="stat_block">
+          <input type="number" name='stat' id="cha" min="4" max="30">
+          <br>
+          <label for="cha">CHA</label>
+        </div>
+      </fieldset>
+
+      <fieldset id="charDetails" form="charForm">
+        <legend>Details</legend>
+        <label for="charName">Name:</label>
+        <input type="text" id="charName">
+        <br>
+        <label for="race">Race: </label>
+        <select id="race">
+          <option value="null">---</option>
+        </select>
+        <label for="subrace">Subrace:</label>
+        <select id="subrace">
+          <option value='null'>---</option>
+        </select>
+        <br>
+        <label for="class">Class:</label>
+        <select id="class">
+          <option value="null">---</option>
+        </select>
+        <label for="subclass">Subclass:</label>
+        <select id="subclass">
+          <option value='null'>---</option>
+        </select>
+        <label for="level">Level:</label>
+        <input id="level" type="number" min="1" max="20">
+        <br>
+        <label for="background">Background:</label>
+        <select id="background"></select>
+        <!-- May remove all alignment/background bits -->
+        <label for="alignment">Alignment:</label>
+        <select id="alignment"></select>
+        <br>
+        <label for="trait1">Trait (1):</label>
+        <input type="text" id='trait1'>
+        <br>
+        <label for="trait2">Trait (2):</label>
+        <input type="text" id='trait2'>
+        <br>
+        <label for="ideal">Ideal:</label>
+        <input type="text" id='ideal'>
+        <br>
+        <label for="bond">Bond:</label>
+        <input type="text" id='bond'>
+        <br>
+        <label for="flaw">Flaw:</label>
+        <input type="text" id='flaw'>
+        <br>
+        <label for="feat">Feat:</label>
+        <select id="feat">
+          <option value=null>---</option>
+        </select>
+      </fieldset>
+
+      <fieldset id="langs" form="charForm">
+        <legend>Languages (Check all that apply)</legend>
+        <div id="standard_lang" class="left">
+          <div>
+            <input type="checkbox" id="common" name="languages" value="Common" checked>
+            <label for="common">Common</label>
+          </div>
+          <div>
+            <input type="checkbox" id="dwarvish" name="languages" value="Dwarvish">
+            <label for="common">Dwarvish</label>
+          </div>
+          <div>
+            <input type="checkbox" id="elvish" name="languages" value="Elvish">
+            <label for="elvish">Elvish</label>
+          </div>
+          <div>
+            <input type="checkbox" id="giant" name="languages" value="Giant">
+            <label for="giant">Giant</label>
+          </div>
+          <div>
+            <input type="checkbox" id="gnomish" name="languages" value="Gnomish">
+            <label for="gnomish">Gnomish</label>
+          </div>
+          <div>
+            <input type="checkbox" id="goblin" name="languages" value="Goblin">
+            <label for="goblin">Goblin</label>
+          </div>
+          <div>
+            <input type="checkbox" id="halfling" name="languages" value="Halfling">
+            <label for="halfling">Halfling</label>
+          </div>
+          <div>
+            <input type="checkbox" id="orc" name="languages" value="Orc">
+            <label for="orc">Orc</label>
+          </div>
+        </div>
+        <div id="exotic_lang" class="right">
+          <div>
+            <input type="checkbox" id="abyssal" name="languages" value="Abyssal">
+            <label for="abyssal">Abyssal</label>
+          </div>
+          <div>
+            <input type="checkbox" id="celestial" name="languages" value="Celestial">
+            <label for="celestial">Celestial</label>
+          </div>
+          <div>
+            <input type="checkbox" id="draconic" name="languages" value="Draconic">
+            <label for="draconic">Draconic</label>
+          </div>
+          <div>
+            <input type="checkbox" id="deep_speech" name="languages" value="Deep Speech">
+            <label for="deep_speech">Deep Speech</label>
+          </div>
+          <div>
+            <input type="checkbox" id="infernal" name="languages" value="Infernal">
+            <label for="infernal">Infernal</label>
+          </div>
+          <div>
+            <input type="checkbox" id="primordial" name="languages" value="Primordial">
+            <label for="primordial">Primordial</label>
+          </div>
+          <div>
+            <input type="checkbox" id="sylvan" name="languages" value="Sylvan">
+            <label for="sylvan">Sylvan</label>
+          </div>
+          <div>
+            <input type="checkbox" id="undercommon" name="languages" value="Undercommon">
+            <label for="undercommon">Undercommon</label>
+          </div>
+        </div>
+      </fieldset>
+      <input type="submit" value="Save">
     </form>
-  </section>
-
-  <section id="content">
-    <label for="results">Results: </label>
-    <select id="results">
-      <option value='null'>---</option>
-    </select>
-    <br>
-  </section>
-
-  <section id="stats">
-      <div class="stat_block">
-        <input type="number" name='stat' id="str" min="4" max="30"> <br>
-        <label for="str">STR</label>
-      </div>
-      <div class="stat_block">
-        <input type="number" name='stat' id="dex" min="4" max="30"> <br>
-        <label for="dex">DEX</label>
-      </div>
-      <div class="stat_block">
-        <input type="number" name='stat' id="con" min="4" max="30"> <br>
-        <label for="con">CON</label>
-      </div>
-      <div class="stat_block">
-        <input type="number" name='stat' id="int" min="4" max="30"> <br>
-        <label for="int">INT</label>
-      </div>
-      <div class="stat_block">
-        <input type="number" name='stat' id="wis" min="4" max="30"> <br>
-        <label for="wis">WIS</label>
-      </div>
-      <div class="stat_block">
-        <input type="number" name='stat' id="cha" min="4" max="30"> <br>
-        <label for="cha">CHA</label>
-      </div>
-  </section>
-
-  <section id="charForm">
-    <label for="charName">Name:</label>
-    <input type="text" id="charName">
-    <br>
-    <label for="race">Race: </label>
-    <select id="race"></select>
-    <label for="subrace">Subrace:</label>
-    <select id="subrace">
-      <option value='null'>---</option>
-    </select>
-    <br>
-    <label for="class">Class:</label>
-    <select id="class"></select>
-    <label for="subclass">Subclass:</label>
-    <select id="subclass">
-      <option value='null'>---</option>
-    </select>
-    <label for="level">Level:</label>
-    <input id="level" type="number" min="1" max="20">
-    <br>
-    <label for="background">Background:</label>
-    <select id="background"></select>
-    <!-- May remove all alignment/background bits -->
-    <label for="alignment">Alignment:</label>
-    <select id="alignment"></select>
-    <br>
-    <label for="trait1">Trait (1):</label>
-    <input type="text" id='trait1'>
-    <br>
-    <label for="trait2">Trait (2):</label>
-    <input type="text" id='trait2'>
-    <br>
-    <label for="ideal">Ideal:</label>
-    <input type="text" id='ideal'>
-    <br>
-    <label for="bond">Bond:</label>
-    <input type="text" id='bond'>
-    <br>
-    <label for="flaw">Flaw:</label>
-    <input type="text" id='flaw'>
-    <br>
-    <label for="feat">Feat:</label>
-    <select id="feat"></select>
-    <fieldset form="charForm">
-      <legend>Languages (Check all that apply)</legend>
-      <div id="standard_lang" class="left">
-        <div>
-          <input type="checkbox" id="common" name="languages" value="Common" checked>
-          <label for="common">Common</label>
-        </div>
-        <div>
-          <input type="checkbox" id="dwarvish" name="languages" value="Dwarvish">
-          <label for="common">Dwarvish</label>
-        </div>
-        <div>
-          <input type="checkbox" id="elvish" name="languages" value="Elvish">
-          <label for="elvish">Elvish</label>
-        </div>
-        <div>
-          <input type="checkbox" id="giant" name="languages" value="Giant">
-          <label for="giant">Giant</label>
-        </div>
-        <div>
-          <input type="checkbox" id="gnomish" name="languages" value="Gnomish">
-          <label for="gnomish">Gnomish</label>
-        </div>
-        <div>
-          <input type="checkbox" id="goblin" name="languages" value="Goblin">
-          <label for="goblin">Goblin</label>
-        </div>
-        <div>
-          <input type="checkbox" id="halfling" name="languages" value="Halfling">
-          <label for="halfling">Halfling</label>
-        </div>
-        <div>
-          <input type="checkbox" id="orc" name="languages" value="Orc">
-          <label for="orc">Orc</label>
-        </div>
-      </div>
-      <div id="exotic_lang" class="right">
-        <div>
-          <input type="checkbox" id="abyssal" name="languages" value="Abyssal">
-          <label for="abyssal">Abyssal</label>
-        </div>
-        <div>
-          <input type="checkbox" id="celestial" name="languages" value="Celestial">
-          <label for="celestial">Celestial</label>
-        </div>
-        <div>
-          <input type="checkbox" id="draconic" name="languages" value="Draconic">
-          <label for="draconic">Draconic</label>
-        </div>
-        <div>
-          <input type="checkbox" id="deep_speech" name="languages" value="Deep Speech">
-          <label for="deep_speech">Deep Speech</label>
-        </div>
-        <div>
-          <input type="checkbox" id="infernal" name="languages" value="Infernal">
-          <label for="infernal">Infernal</label>
-        </div>
-        <div>
-          <input type="checkbox" id="primordial" name="languages" value="Primordial">
-          <label for="primordial">Primordial</label>
-        </div>
-        <div>
-          <input type="checkbox" id="sylvan" name="languages" value="Sylvan">
-          <label for="sylvan">Sylvan</label>
-        </div>
-        <div>
-          <input type="checkbox" id="undercommon" name="languages" value="Undercommon">
-          <label for="undercommon">Undercommon</label>
-        </div>
-      </div>
-    </fieldset>
-    <input type="submit" id="saveButton" value="Save">
-  </section>
+  </div>
 </body>
+
 </html>

@@ -47,7 +47,7 @@ const onRequest = (request, response) => {
       request.on('end', () => {
         const bodyString = Buffer.concat(body).toString();
         const bodyParams = query.parse(bodyString);
-        jsonHandler.addUser(request, response, bodyParams);
+        jsonHandler.characterPOST(request, response, bodyParams);
       });
     }
   } else {
